@@ -1,12 +1,14 @@
 function test() {
     var canvas = d3.select('body')
             .append('svg')
-            .attr('width', 500)
-            .attr('height', 500);
+            .attr('width', screen.width)
+            .attr('height', screen.height);
 
-    var circle = canvas.append('circle')
-            .attr('cx', 250)
-            .attr('cy', 250)
-            .attr('r', 50)
+    for (var x = 0; x < 100; x++) {
+        var circle = canvas.append('circle')
+            .attr('cx', Math.random()*screen.width)
+            .attr('cy', Math.random()*screen.height)
+            .attr('r', 5)
             .attr('fill', 'pink');
+    }
 }
