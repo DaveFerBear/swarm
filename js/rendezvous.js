@@ -1,22 +1,12 @@
-var dataset = [],
-i = 0;
+function test() {
+    var canvas = d3.select('body')
+            .append('svg')
+            .attr('width', 500)
+            .attr('height', 500);
 
-for(i=0; i<5; i++){
-
-    dataset.push(Math.round(Math.random()*100));
-
-    }
-
-    var sampleSVG = d3.select("#viz")
-        .append("svg")
-        .attr("width", 400)
-        .attr("height", 400);    
-
-    sampleSVG.selectAll("circle")
-        .data(dataset)
-        .enter().append("circle")
-        .style("stroke", "gray")
-        .style("fill", "black")
-        .attr("r", 40)
-        .attr("cx", 50)
-        .attr("cy", 20);
+    var circle = canvas.append('circle')
+            .attr('cx', 250)
+            .attr('cy', 250)
+            .attr('r', 50)
+            .attr('fill', 'pink');
+}

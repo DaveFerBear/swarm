@@ -3,3 +3,7 @@ body {
     height: 100%;
     background-color: rgb(39, 40, 34);
 }
+
+h1 {
+    font-family: Helvetica;
+}
