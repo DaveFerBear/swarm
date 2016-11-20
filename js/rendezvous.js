@@ -1,4 +1,4 @@
-function test() {
+
 
 	class Org {
 		constructor(_width, _height) {
@@ -25,4 +25,5 @@ function test() {
 			.attr('fill', 'pink');
 
 	circles.transition().attr('cx', 0);
-}
+
+	console.log('eg');
