@@ -1,5 +1,5 @@
 function test() {
-	console.log('test');
+	update();
 }
 
 var numBodies = 100;
@@ -42,21 +42,27 @@ var circles = canvas.selectAll("circle")
 		.attr('r', 5)
 		.attr('fill', 'rgb(255, 0, 213)');
 
-update();
-
 function update() {
-	circles
-		.data(orgs)
-		.enter().append('circle')
-		.attr('cx', function(d, i) {
-			return Math.random() * screen.width;
-			update();
-		})
-		.attr('cy', function(d, i) {
-			return Math.random() * screen.height;
-		})
-		.attr('r', 5)
-		.attr('fill', 'rgb(255, 0, 213)');
+	for (var i = 0; i < numBodies; i++) {
+		var dx = 0;
+		var dy = 0;
+		for (var j = 0; j < numBodies; j++) {
+			if (i!=j) {
+				dx += orgs[j][0];
+				dy += orgs[j][1];
+			}
+		}
+		orgs[i][0] += (orgs[i][0] - dx)/20/(numBodies - 1);
+		orgs[i][1] = (orgs[i][1] - dy)/20/(numBodies - 1);
+	}	
+	circles.transition().attr('cx', function(d, i) {
+				return orgs[i][0];
+			})
+			.attr('cy', function(d, i) {
+				return orgs[i][1];
+			})
+			.attr('r', 5)
+			.attr('fill', 'rgb(255, 0, 213)');
 }
 
 
