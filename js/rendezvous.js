@@ -34,6 +34,7 @@ var circles = canvas.selectAll("circle")
 		.enter().append('circle')
 		.attr('cx', function(d, i) {
 			return Math.random() * screen.width;
+			update();
 		})
 		.attr('cy', function(d, i) {
 			return Math.random() * screen.height;
@@ -41,13 +42,21 @@ var circles = canvas.selectAll("circle")
 		.attr('r', 5)
 		.attr('fill', 'rgb(255, 0, 213)');
 
-//update();
+update();
 
 function update() {
-	circles.transition()
-		.attr('cx', function() { return Math.random() * screen.width; })
-		.attr('cy', function() { return Math.random() * screen.height; });
-	setInterval(update(),250);
+	circles
+		.data(orgs)
+		.enter().append('circle')
+		.attr('cx', function(d, i) {
+			return Math.random() * screen.width;
+			update();
+		})
+		.attr('cy', function(d, i) {
+			return Math.random() * screen.height;
+		})
+		.attr('r', 5)
+		.attr('fill', 'rgb(255, 0, 213)');
 }
 
 
