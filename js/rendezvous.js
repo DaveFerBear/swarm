@@ -1,26 +1,13 @@
-class Org {
-	constructor(_width, _height) {
-		this.width = _width;
-		this.height = _height;
-	}
+function test() {
+	console.log('test');
 }
 
-var orgs = d3.range(100).map(function() {
-	return new Org(Math.random() * screen.width, Math.random() * screen.height);
-});
+var numBodies = 100;
 
 var canvas = d3.select('body')
 		.append('svg')
 		.attr('width', screen.width)
 		.attr('height', screen.height);
-
-var circles = canvas.selectAll("circle")
-		.data(orgs)
-		.enter().append('circle')
-		.attr('cx', d => d.width )
-		.attr('cy', d => d.height )
-		.attr('r', 5)
-		.attr('fill', 'rgb(255, 0, 213)');
 
 var text = canvas.append("svg:text")
         .attr("x", screen.width - 100)
@@ -36,4 +23,31 @@ d3.timer(function() {
 	if (duration >= 1000) frames = 0, start = now;
 });
 
-circles.transition().attr('cx', 0);
+var orgs = [];
+
+for (var x = 0; x < numBodies; x++) {
+	orgs.push([Math.random() * screen.width, Math.random() * screen.height]);
+}
+
+var circles = canvas.selectAll("circle")
+		.data(orgs)
+		.enter().append('circle')
+		.attr('cx', function(d, i) {
+			return Math.random() * screen.width;
+		})
+		.attr('cy', function(d, i) {
+			return Math.random() * screen.height;
+		})
+		.attr('r', 5)
+		.attr('fill', 'rgb(255, 0, 213)');
+
+//update();
+
+function update() {
+	circles.transition()
+		.attr('cx', function() { return Math.random() * screen.width; })
+		.attr('cy', function() { return Math.random() * screen.height; });
+	setInterval(update(),250);
+}
+
+
