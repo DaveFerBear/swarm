@@ -2,7 +2,7 @@ function test() {
 	update();
 }
 
-var numBodies = 2;
+var numBodies = 100;
 
 var canvas = d3.select('body')
 		.append('svg')
@@ -33,11 +33,12 @@ var circles = canvas.selectAll("circle")
 		.data(orgs)
 		.enter().append('circle')
 		.attr('cx', function(d, i) {
-			return Math.random() * screen.width;
-			update();
+			d = orgs[i][0];
+			return d;
 		})
 		.attr('cy', function(d, i) {
-			return Math.random() * screen.height;
+			d = orgs[i][1];
+			return d;
 		})
 		.attr('r', 5)
 		.attr('fill', 'rgb(255, 0, 213)');
@@ -52,18 +53,19 @@ function update() {
 				dy += orgs[j][1];
 			}
 		}
-		dx = dx/(numBodies - 1)/100000;
-		dy = dy/(numBodies - 1)/100000;
-		console.log(dx);
-		console.log(dy);
-		orgs[i][0] += (orgs[i][0] - dx);
-		orgs[i][1] += (orgs[i][1] - dy);
+		dx = dx/(numBodies - 1);
+		dy = dy/(numBodies - 1);
+
+		orgs[i][0]+= (dx-orgs[i][0])/10;
+		orgs[i][1]+= (dy-orgs[i][1])/10;
 	}	
 	circles.transition().attr('cx', function(d, i) {
-				return orgs[i][0];
+				d = orgs[i][0];
+				return d;
 			})
 			.attr('cy', function(d, i) {
-				return orgs[i][1];
+				d = orgs[i][1]
+				return d;
 			})
 			.attr('r', 5)
 			.attr('fill', 'rgb(255, 0, 213)');
