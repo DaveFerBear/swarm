@@ -1,5 +1,7 @@
 function test() {
-	update();
+	setInterval(function() {
+		update();
+	}, 0);
 }
 
 var numBodies = 100;
@@ -56,19 +58,20 @@ function update() {
 		dx = dx/(numBodies - 1);
 		dy = dy/(numBodies - 1);
 
-		orgs[i][0]+= (dx-orgs[i][0])/10;
-		orgs[i][1]+= (dy-orgs[i][1])/10;
+		orgs[i][0]+= (dx-orgs[i][0])/100;
+		orgs[i][1]+= (dy-orgs[i][1])/100;
 	}	
-	circles.transition().attr('cx', function(d, i) {
+	circles.transition()
+			.duration(200)
+			.ease(d3.easeLinear)
+			.attr('cx', function(d, i) {
 				d = orgs[i][0];
 				return d;
 			})
 			.attr('cy', function(d, i) {
 				d = orgs[i][1]
 				return d;
-			})
-			.attr('r', 5)
-			.attr('fill', 'rgb(255, 0, 213)');
+			});
 }
 
 
