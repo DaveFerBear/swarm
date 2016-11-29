@@ -20,8 +20,8 @@ var data = d3.range(200).map(function() {
 	return {
 		x: 0,
 		y: 0,
-		vx: 0.01*(Math.random()-0.5),
-		vy: 0.01*(Math.random()-0.5)
+		vx: 0,
+		vy: 0
 	}
 });
 
@@ -52,6 +52,8 @@ d3.timer(function() {
 	text.text(~~(++frames * 1000 / duration));
 	if (duration >= 1000) frames = 0, start = now;
 
+	data.sort();
+
 	data.forEach(function(d) {
 		d.vx += (Math.random()-0.5)*0.001;
 		d.vy += (Math.random()-0.5)*0.001;
@@ -64,34 +66,3 @@ d3.timer(function() {
 			return "translate(" + x(d.x) + "," + y(d.y) + ")";
 		});
 });
-
-function update() {
-	for (var i = 0; i < numBodies; i++) {
-		var dx = 0;
-		var dy = 0;
-		for (var j = 0; j < numBodies; j++) {
-			if (i!=j) {
-				dx += orgs[j][0];
-				dy += orgs[j][1];
-			}
-		}
-		dx = dx/(numBodies - 1);
-		dy = dy/(numBodies - 1);
-
-		orgs[i][0]+= (dx-orgs[i][0])/(numBodies*2);
-		orgs[i][1]+= (dy-orgs[i][1])/(numBodies*2);
-	}	
-	circles.transition()
-			.duration(100)
-			.ease(d3.easeLinear)
-			.attr('cx', function(d, i) {
-				d = orgs[i][0];
-				return d;
-			})
-			.attr('cy', function(d, i) {
-				d = orgs[i][1]
-				return d;
-			});
-}
-
-
