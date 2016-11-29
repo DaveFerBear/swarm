@@ -46,23 +46,27 @@ var circles = canvas.selectAll("circle")
 		.attr('r', 5)
 		.attr('fill', 'rgb(255, 0, 213)');
 
+circles.attr("transform", function(d) {
+			return "translate(" + x(d.x) + "," + y(d.y) + ")";
+		});
+
 d3.timer(function() {
 	//Update FPS
 	var now = Date.now(), duration = now - start;
 	text.text(~~(++frames * 1000 / duration));
 	if (duration >= 1000) frames = 0, start = now;
 
-	data.sort();
+	if (run) {
+		data.sort();
+		data.forEach(function(d) {
+			d.vx += (Math.random()-0.5)*0.001;
+			d.vy += (Math.random()-0.5)*0.001;
 
-	data.forEach(function(d) {
-		d.vx += (Math.random()-0.5)*0.001;
-		d.vy += (Math.random()-0.5)*0.001;
-
-		d.x += d.vx;
-		d.y += d.vy;
-	})
-
-	circles.attr("transform", function(d) {
+			d.x += d.vx;
+			d.y += d.vy;
+		})
+		circles.attr("transform", function(d) {
 			return "translate(" + x(d.x) + "," + y(d.y) + ")";
 		});
+	}
 });
