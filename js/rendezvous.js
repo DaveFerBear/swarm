@@ -1,8 +1,8 @@
-function test() {
-	setInterval(function() {
-		update();
-	}, 0);
+function play() {
+	run = !run;
 }
+
+var run = false;
 
 var canvas = d3.select('body')
 		.append('svg')
@@ -20,8 +20,8 @@ var data = d3.range(200).map(function() {
 	return {
 		x: 0,
 		y: 0,
-		vx: 0.001,
-		vy: 0.001
+		vx: 0.01*(Math.random()-0.5),
+		vy: 0.01*(Math.random()-0.5)
 	}
 });
 
@@ -53,15 +53,16 @@ d3.timer(function() {
 	if (duration >= 1000) frames = 0, start = now;
 
 	data.forEach(function(d) {
+		d.vx += (Math.random()-0.5)*0.001;
+		d.vy += (Math.random()-0.5)*0.001;
+
 		d.x += d.vx;
 		d.y += d.vy;
 	})
 
 	circles.attr("transform", function(d) {
 			return "translate(" + x(d.x) + "," + y(d.y) + ")";
-		}).attr("r", function(d) {
-			return Math.min(1 + 1000 * Math.abs(d.vx * d.vy), 10);
-	});
+		});
 });
 
 function update() {
