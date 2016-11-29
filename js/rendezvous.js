@@ -16,12 +16,12 @@ var text = canvas.append("svg:text")
 var start = Date.now(),
 	frames = 0;
 
-var data = d3.range(200).map(function() {
+var data = d3.range(500).map(function() {
 	return {
 		x: 0,
 		y: 0,
-		vx: 0,
-		vy: 0
+		vx: (Math.random()-0.5)*.05,
+		vy: (Math.random()-0.5)*.05
 	}
 });
 
@@ -59,8 +59,8 @@ d3.timer(function() {
 	if (run) {
 		data.sort();
 		data.forEach(function(d) {
-			d.vx += (Math.random()-0.5)*0.001;
-			d.vy += (Math.random()-0.5)*0.001;
+			d.vx += (Math.random()-0.5)*0.005;
+			d.vy += (Math.random()-0.5)*0.005;
 
 			d.x += d.vx;
 			d.y += d.vy;
