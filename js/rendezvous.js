@@ -4,7 +4,7 @@ function test() {
 	}, 0);
 }
 
-var numBodies = 100;
+var numBodies = 200;
 
 var canvas = d3.select('body')
 		.append('svg')
@@ -58,11 +58,11 @@ function update() {
 		dx = dx/(numBodies - 1);
 		dy = dy/(numBodies - 1);
 
-		orgs[i][0]+= (dx-orgs[i][0])/100;
-		orgs[i][1]+= (dy-orgs[i][1])/100;
+		orgs[i][0]+= (dx-orgs[i][0])/(numBodies*2);
+		orgs[i][1]+= (dy-orgs[i][1])/(numBodies*2);
 	}	
 	circles.transition()
-			.duration(200)
+			.duration(100)
 			.ease(d3.easeLinear)
 			.attr('cx', function(d, i) {
 				d = orgs[i][0];
