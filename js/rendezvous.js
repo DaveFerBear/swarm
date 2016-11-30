@@ -16,7 +16,7 @@ var text = canvas.append("svg:text")
 var start = Date.now(),
 	frames = 0;
 
-var data = d3.range(500).map(function() {
+var data = d3.range(200).map(function() {
 	return {
 		x: 0,
 		y: 0,
@@ -57,16 +57,22 @@ d3.timer(function() {
 	if (duration >= 1000) frames = 0, start = now;
 
 	if (run) {
-		data.sort();
-		data.forEach(function(d) {
-			d.vx += (Math.random()-0.5)*0.005;
-			d.vy += (Math.random()-0.5)*0.005;
-
-			d.x += d.vx;
-			d.y += d.vy;
-		})
+		rendezvous();
 		circles.attr("transform", function(d) {
 			return "translate(" + x(d.x) + "," + y(d.y) + ")";
 		});
 	}
 });
+
+function rendezvous() {
+	data.sort(function(a, b) { //sort based on x position
+		return a.x - b.x;
+	});
+	console.log(data);
+	data.forEach(function(d) {
+		d.vx += (Math.random()-0.5)*0.005;
+		d.vy += (Math.random()-0.5)*0.005;
+		d.x += d.vx;
+		d.y += d.vy;
+	})
+}
