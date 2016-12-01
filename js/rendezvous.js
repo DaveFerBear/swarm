@@ -21,7 +21,8 @@ var data = d3.range(200).map(function() {
 		x: 0,
 		y: 0,
 		vx: (Math.random()-0.5)*.05,
-		vy: (Math.random()-0.5)*.05
+		vy: (Math.random()-0.5)*.05,
+		color: 'rgb(255, 0, 213)'
 	}
 });
 
@@ -44,7 +45,9 @@ var circles = canvas.selectAll("circle")
 			return d.y;
 		})
 		.attr('r', 5)
-		.attr('fill', 'rgb(255, 0, 213)');
+		.attr('fill', function(d) {
+			return d.color;
+		});
 
 circles.attr("transform", function(d) {
 			return "translate(" + x(d.x) + "," + y(d.y) + ")";
@@ -58,17 +61,25 @@ d3.timer(function() {
 
 	if (run) {
 		rendezvous();
-		circles.attr("transform", function(d) {
+		circles.attr('transform', function(d) {
 			return "translate(" + x(d.x) + "," + y(d.y) + ")";
+		}).attr('fill', function(d) {
+			return d.color;
 		});
 	}
 });
 
 function rendezvous() {
 	data.sort(function(a, b) { //sort based on x position
-		return a.x - b.x;
+		return (a.x - b.x);
 	});
-	console.log(data);
+	var j = data.length/2;
+	for (var i = 0; i < j; i++) {
+		data[i].color = 'rgb(100, 0, 100)';
+	}
+	for (; j < data.length; j++) {
+		data[j].color = 'rgb(255, 0, 213)';
+	}
 	data.forEach(function(d) {
 		d.vx += (Math.random()-0.5)*0.005;
 		d.vy += (Math.random()-0.5)*0.005;
