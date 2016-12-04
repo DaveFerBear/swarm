@@ -10,9 +10,10 @@ var canvas = d3.select('body')
 		.attr('height', screen.height);
 
 var text = canvas.append("svg:text")
-        .attr("x", screen.width - 100)
-        .attr("y", 20);
-    
+		.attr("x", screen.width - 100)
+		.attr("y", 20)
+		.attr('color', 'white');
+	
 var start = Date.now(),
 	frames = 0;
 
@@ -34,12 +35,12 @@ var data = d3.range(200).map(function() {
 });
 
 var x = d3.scaleLinear()
-    .domain([-5, 5])
-    .range([0, screen.width]);
+	.domain([-5, 5])
+	.range([0, screen.width]);
 
 var y = d3.scaleLinear()
-    .domain([-5, 5])
-    .range([0, screen.height]);
+	.domain([-5, 5])
+	.range([0, screen.height]);
 
 
 var circles = canvas.selectAll("circle")
@@ -80,6 +81,7 @@ function rendezvous() {
 	data.sort(function(a, b) { //sort based on x position
 		return (a.x - b.x);
 	});
+	connect(data[0], data[1]);
 	var j = data.length/2;
 	for (var i = 0; i < j; i++) {
 		data[i].color = 'rgb(100, 0, 100)';
@@ -95,3 +97,12 @@ function rendezvous() {
 	})
 }
 
+function connect(a, b) {
+	canvas.append('line')
+			 .attr('x1', function() { return x(a.x) })
+			 .attr('y1', function() { return y(a.y) })
+			 .attr('x2', function() { return x(b.x) })
+			 .attr('y2', function() { return y(b.y) })
+			 .attr('stroke-width', 2)
+			 .attr('stroke', 'white');
+}
