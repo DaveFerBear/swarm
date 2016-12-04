@@ -16,14 +16,21 @@ var text = canvas.append("svg:text")
 var start = Date.now(),
 	frames = 0;
 
+function agent(_x, _y, _vx, _vy, _color) {
+	this.x = _x;
+	this.y = _y;
+	this.vx = _vx;
+	this.vy = _vy;
+	this.color = _color;
+}
+
 var data = d3.range(200).map(function() {
-	return {
-		x: 0,
-		y: 0,
-		vx: (Math.random()-0.5)*.05,
-		vy: (Math.random()-0.5)*.05,
-		color: 'rgb(255, 0, 213)'
-	}
+	return new agent(
+		0,
+		0,
+		(Math.random()-0.5)*.05,
+		(Math.random()-0.5)*.05,
+		'rgb(255, 0, 213)');
 });
 
 var x = d3.scaleLinear()
@@ -87,3 +94,4 @@ function rendezvous() {
 		d.y += d.vy;
 	})
 }
+
