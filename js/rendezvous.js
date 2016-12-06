@@ -23,6 +23,7 @@ function agent(_x, _y, _vx, _vy, _color) {
 	this.vx = _vx;
 	this.vy = _vy;
 	this.color = _color;
+	this.lines = [];
 }
 
 function line(_x1, _y1, _x2, _y2) {
@@ -82,9 +83,9 @@ d3.timer(function() {
 		}).attr('fill', function(d) {
 			return d.color;
 		});
-		lines.attr('transform', function(d) {
-			return "translate(" + x(d.x) + "," + y(d.y) + ")";
-		});
+		// lines.attr('transform', function(d) {
+		// 	return "translate(" + x(d.x) + "," + y(d.y) + ")";
+		// });
 
 	}
 });
@@ -115,11 +116,14 @@ function rendezvous() {
 }
 
 function connect(a, b) {
-	lines = canvas.append('line')
-			.attr('x1', function() { return x(a.x) })
-			.attr('y1', function() { return y(a.y) })
-			.attr('x2', function() { return x(b.x) })
-			.attr('y2', function() { return y(b.y) })
-			.attr('stroke-width', 1)
-			.attr('stroke', 'white');
+	// lines = canvas.append('line')
+	// 		.attr('x1', function() { return x(a.x) })
+	// 		.attr('y1', function() { return y(a.y) })
+	// 		.attr('x2', function() { return x(b.x) })
+	// 		.attr('y2', function() { return y(b.y) })
+	// 		.attr('stroke-width', 1)
+	// 		.attr('stroke', 'white');
+	lines = d3.line()
+	    .x(50)
+	    .y(10);
 }
