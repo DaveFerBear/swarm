@@ -42,6 +42,10 @@ var data = d3.range(100).map(function() {
 		'rgb(255, 0, 213)');
 });
 
+data.forEach(function(d) {
+	d.lines.push(new line(d.x, d.y, 0,0));
+});
+
 var x = d3.scaleLinear()
 	.domain([-5, 5])
 	.range([0, screen.width]);
@@ -50,7 +54,7 @@ var y = d3.scaleLinear()
 	.domain([-5, 5])
 	.range([0, screen.height]);
 
-var circles = canvas.selectAll("circle")
+var circles = canvas.selectAll('circle')
 		.data(data)
 		.enter().append('circle')
 		.attr('cx', function(d) {
@@ -64,8 +68,23 @@ var circles = canvas.selectAll("circle")
 			return d.color;
 		});
 
-var lines;
+var lines = canvas.selectAll('line')
+		.data(data)
+		.enter().append('line')
+		.attr('x1', function(d) {
+			return d.lines[0].x1;
+		})
+		.attr('x2', function(d) {
+			return d.lines[0].x2;
+		})
+		.attr('y1', function(d) {
+			return d.lines[0].y1;
+		})
+		.attr('y2', function(d) {
+			return d.lines[0].y2;
+		});
 
+//initializes circles at center to begin
 circles.attr("transform", function(d) {
 			return "translate(" + x(d.x) + "," + y(d.y) + ")";
 		});
@@ -83,47 +102,28 @@ d3.timer(function() {
 		}).attr('fill', function(d) {
 			return d.color;
 		});
-		// lines.attr('transform', function(d) {
-		// 	return "translate(" + x(d.x) + "," + y(d.y) + ")";
-		// });
-
 	}
 });
 
 function rendezvous() {
-	data.sort(function(a, b) { //sort based on x position
-		return (a.x - b.x);
-	});
-
-	var j = data.length/2;
-	for (var i = 0; i < j; i++) {
-		data[i].color = 'rgb(100, 0, 100)';
-	}
-	for (; j < data.length; j++) {
-		data[j].color = 'rgb(255, 0, 213)';
-	}
-
-	for (var k = 0; k < data.length; k++) {
-		connect(data[0], data[k]);
-	}
+	// data.sort(function(a, b) {
+	// 	return (a.x - b.x);
+	// });
 
 	data.forEach(function(d) {
 		d.vx += (Math.random()-0.5)*0.005;
 		d.vy += (Math.random()-0.5)*0.005;
 		d.x += d.vx;
 		d.y += d.vy;
-	})
+	});
+	updateLines();
 }
 
-function connect(a, b) {
-	// lines = canvas.append('line')
-	// 		.attr('x1', function() { return x(a.x) })
-	// 		.attr('y1', function() { return y(a.y) })
-	// 		.attr('x2', function() { return x(b.x) })
-	// 		.attr('y2', function() { return y(b.y) })
-	// 		.attr('stroke-width', 1)
-	// 		.attr('stroke', 'white');
-	lines = d3.line()
-	    .x(50)
-	    .y(10);
+function updateLines() {
+	data.forEach(function(d) {
+		d.lines[0].x1 = d.x;
+		d.lines[0].y1 = d.y;
+		d.lines[0].x2 = 0;
+		d.lines[0].y2 = 0;
+	})
 }
