@@ -74,20 +74,21 @@ var lines = canvas.selectAll('line')
 		.attr('x1', function(d) {
 			return d.lines[0].x1;
 		})
-		.attr('x2', function(d) {
-			return d.lines[0].x2;
-		})
 		.attr('y1', function(d) {
 			return d.lines[0].y1;
 		})
+		.attr('x2', function(d) {
+			return d.lines[0].x2;
+		})
 		.attr('y2', function(d) {
 			return d.lines[0].y2;
-		});
+		})
+		.attr('stroke', 'white')
+		.attr('stroke-width', 1);
 
 //initializes circles at center to begin
-circles.attr("transform", function(d) {
-			return "translate(" + x(d.x) + "," + y(d.y) + ")";
-		});
+renderCircles();
+
 
 d3.timer(function() {
 	//Update FPS
@@ -97,13 +98,24 @@ d3.timer(function() {
 
 	if (run) {
 		rendezvous();
-		circles.attr('transform', function(d) {
-			return "translate(" + x(d.x) + "," + y(d.y) + ")";
-		}).attr('fill', function(d) {
-			return d.color;
-		});
+		renderCircles();
 	}
 });
+
+function renderCircles() {
+	circles.attr('transform', function(d) {
+		return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
+	}).attr('fill', function(d) {
+		return d.color;
+	});
+}
+
+function renderLines() {
+	updateLines();
+	lines.attr('transform', function(d) {
+		return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
+	});
+}
 
 function rendezvous() {
 	// data.sort(function(a, b) {
@@ -125,5 +137,5 @@ function updateLines() {
 		d.lines[0].y1 = d.y;
 		d.lines[0].x2 = 0;
 		d.lines[0].y2 = 0;
-	})
+	});
 }
