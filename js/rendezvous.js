@@ -99,6 +99,7 @@ d3.timer(function() {
 	if (run) {
 		rendezvous();
 		renderCircles();
+		renderLines();
 	}
 });
 
