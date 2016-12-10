@@ -33,7 +33,7 @@ function line(_x1, _y1, _x2, _y2) {
 	this.y2 = _y2;
 }
 
-var data = d3.range(100).map(function() {
+var data = d3.range(3).map(function() {
 	return new agent(
 		0,
 		0,
@@ -43,7 +43,7 @@ var data = d3.range(100).map(function() {
 });
 
 data.forEach(function(d) {
-	d.lines.push(new line(d.x, d.y, 0,0));
+	d.lines.push(new line(100*Math.random(), 100*Math.random(), 100*Math.random(), 100*Math.random()));
 });
 
 var x = d3.scaleLinear()
@@ -89,7 +89,6 @@ var lines = canvas.selectAll('line')
 //initializes circles at center to begin
 renderCircles();
 
-
 d3.timer(function() {
 	//Update FPS
 	var now = Date.now(), duration = now - start;
@@ -99,7 +98,6 @@ d3.timer(function() {
 	if (run) {
 		rendezvous();
 		renderCircles();
-		renderLines();
 	}
 });
 
@@ -111,12 +109,6 @@ function renderCircles() {
 	});
 }
 
-function renderLines() {
-	updateLines();
-	lines.attr('transform', function(d) {
-		return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
-	});
-}
 
 function rendezvous() {
 	// data.sort(function(a, b) {
@@ -134,9 +126,10 @@ function rendezvous() {
 
 function updateLines() {
 	data.forEach(function(d) {
-		d.lines[0].x1 = d.x;
-		d.lines[0].y1 = d.y;
-		d.lines[0].x2 = 0;
-		d.lines[0].y2 = 0;
+		d.lines[0].x1 = 100*Math.random();
+		d.lines[0].y1 = 100*Math.random();
+		d.lines[0].x2 = -100*Math.random();
+		d.lines[0].y2 = -100*Math.random();
 	});
+	//d3.select('.line').transition();
 }
