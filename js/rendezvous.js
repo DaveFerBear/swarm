@@ -35,15 +35,15 @@ function line(_x1, _y1, _x2, _y2) {
 
 var data = d3.range(3).map(function() {
 	return new agent(
+		(Math.random()-0.5)*5,
+		(Math.random()-0.5)*5,
 		0,
 		0,
-		(Math.random()-0.5)*.05,
-		(Math.random()-0.5)*.05,
 		'rgb(255, 0, 213)');
 });
 
 data.forEach(function(d) {
-	d.lines.push(new line(100*Math.random(), 100*Math.random(), 100*Math.random(), 100*Math.random()));
+	d.lines.push(new line(d.x, d.y, 0, 0));
 });
 
 var x = d3.scaleLinear()
@@ -58,10 +58,10 @@ var circles = canvas.selectAll('circle')
 		.data(data)
 		.enter().append('circle')
 		.attr('cx', function(d) {
-			return d.x;
+			return x(d.x);
 		})
 		.attr('cy', function(d) {
-			return d.y;
+			return y(d.y);
 		})
 		.attr('r', 5)
 		.attr('fill', function(d) {
@@ -72,22 +72,22 @@ var lines = canvas.selectAll('line')
 		.data(data)
 		.enter().append('line')
 		.attr('x1', function(d) {
-			return d.lines[0].x1;
+			return x(d.lines[0].x1);
 		})
 		.attr('y1', function(d) {
-			return d.lines[0].y1;
+			return y(d.lines[0].y1);
 		})
 		.attr('x2', function(d) {
-			return d.lines[0].x2;
+			return x(d.lines[0].x2);
 		})
 		.attr('y2', function(d) {
-			return d.lines[0].y2;
+			return y(d.lines[0].y2);
 		})
 		.attr('stroke', 'white')
 		.attr('stroke-width', 1);
 
 //initializes circles at center to begin
-renderCircles();
+render();
 
 d3.timer(function() {
 	//Update FPS
@@ -97,13 +97,13 @@ d3.timer(function() {
 
 	if (run) {
 		rendezvous();
-		renderCircles();
+		render();
 	}
 });
 
-function renderCircles() {
+function render() {
 	circles.attr('transform', function(d) {
-		return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
+		return 'translate(' + d.x + ',' + d.y + ')';
 	}).attr('fill', function(d) {
 		return d.color;
 	});
@@ -111,25 +111,15 @@ function renderCircles() {
 
 
 function rendezvous() {
-	// data.sort(function(a, b) {
-	// 	return (a.x - b.x);
-	// });
-
 	data.forEach(function(d) {
-		d.vx += (Math.random()-0.5)*0.005;
-		d.vy += (Math.random()-0.5)*0.005;
+		d.vx += (Math.random()-0.5)*0.5;
+		d.vy += (Math.random()-0.5)*0.5;
 		d.x += d.vx;
 		d.y += d.vy;
-	});
-	updateLines();
-}
 
-function updateLines() {
-	data.forEach(function(d) {
-		d.lines[0].x1 = 100*Math.random();
-		d.lines[0].y1 = 100*Math.random();
-		d.lines[0].x2 = -100*Math.random();
-		d.lines[0].y2 = -100*Math.random();
+		d.lines[0].x1 = d.x;
+		d.lines[0].y1 = d.y;
+		d.lines[0].x2 = 0;
+		d.lines[0].y2 = 0;
 	});
-	//d3.select('.line').transition();
 }
