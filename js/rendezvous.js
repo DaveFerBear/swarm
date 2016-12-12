@@ -33,7 +33,7 @@ function line(_x1, _y1, _x2, _y2) {
 	this.y2 = _y2;
 }
 
-var data = d3.range(3).map(function() {
+var data = d3.range(10).map(function() {
 	return new agent(
 		(Math.random()-0.5)*5,
 		(Math.random()-0.5)*5,
@@ -96,7 +96,8 @@ d3.timer(function() {
 	if (duration >= 1000) frames = 0, start = now;
 
 	if (run) {
-		rendezvous();
+		//moveRandom();
+		moveRendezvous();
 		render();
 	}
 });
@@ -107,10 +108,37 @@ function render() {
 	}).attr('fill', function(d) {
 		return d.color;
 	});
+	lines.attr('x1', function(d) {
+			return +(d3.select(this).attr('x1')) + d.vx;
+	}).attr('y1', function(d) {
+			return +(d3.select(this).attr('y1')) + d.vy;
+	});
 }
 
+function dist(a, b) {
+	return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+}
 
-function rendezvous() {
+function moveRendezvous() {
+	for (var a = 0; a < data.length; a++) {
+		var x_component = 0;
+		var y_component = 0;
+		for (var b = 0; b < data.length; b++) {
+			x_component += (data[b].x - data[a].x)*dist(data[a], data[b])*.01;
+			x_component += (data[b].y - data[a].y)*dist(data[a], data[b])*.01;
+		}
+		// console.log(x_component);
+		// console.log(y_component);
+		x_component /= data.length;
+		y_component /= data.length;
+		data[a].vx += x_component;
+		data[a].vy += y_component;
+		data[a].x += data[a].vx;
+		data[a].y += data[a].vy;
+	}
+}
+
+function moveRandom() {
 	data.forEach(function(d) {
 		d.vx += (Math.random()-0.5)*0.5;
 		d.vy += (Math.random()-0.5)*0.5;
