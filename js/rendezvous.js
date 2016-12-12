@@ -42,9 +42,13 @@ var data = d3.range(100).map(function() {
 		'rgb(255, 0, 213)');
 });
 
-data.forEach(function(d) {
-	d.lines.push(new line(d.x, d.y, 0, 0));
-});
+var lineData = [];
+for (var a = 0; a < data.length; a++) {
+	lineData.push([]);
+	for (var b = 0; b < data.length; b++) {
+		lineData[a].push(new line(data[a].x, data[a].y, data[b].x, data[b].y));
+	}
+}
 
 var x = d3.scaleLinear()
 	.domain([-5, 5])
@@ -70,8 +74,7 @@ var circles = canvas.selectAll('circle')
 
 var skirts = canvas.selectAll('skirt')
 		.data(data)
-		.enter()
-		.append('circle')
+		.enter().append('circle')
 		.attr('cx', function(d) {
 			return x(d.x);
 		})
@@ -84,19 +87,19 @@ var skirts = canvas.selectAll('skirt')
 		});
 
 var lines = canvas.selectAll('line')
-		.data(data)
+		.data(lineData)
 		.enter().append('line')
 		.attr('x1', function(d) {
-			return x(d.lines[0].x1);
+			return x(d.x1);
 		})
 		.attr('y1', function(d) {
-			return y(d.lines[0].y1);
+			return y(d.y1);
 		})
 		.attr('x2', function(d) {
-			return x(d.lines[0].x2);
+			return x(d.x2);
 		})
 		.attr('y2', function(d) {
-			return y(d.lines[0].y2);
+			return y(d.y2);
 		})
 		.attr('stroke', 'white')
 		.attr('stroke-width', 1);
@@ -123,14 +126,16 @@ function render() {
 	}).attr('fill', function(d) {
 		return d.color;
 	});
+
 	skirts.attr('transform', function(d) {
 		return 'translate(' + d.x + ',' + d.y + ')';
 	});
-	lines.attr('x1', function(d) {
-			return +(d3.select(this).attr('x1')) + d.vx;
-	}).attr('y1', function(d) {
-			return +(d3.select(this).attr('y1')) + d.vy;
-	});
+
+	// lines.attr('x1', function(d) {
+	// 		return +(d3.select(this).attr('x1')) + d.vx;
+	// }).attr('y1', function(d) {
+	// 		return +(d3.select(this).attr('y1')) + d.vy;
+	// });
 }
 
 function dist(a, b) {
@@ -163,9 +168,9 @@ function moveRandom() {
 		d.x += d.vx;
 		d.y += d.vy;
 
-		d.lines[0].x1 = d.x;
-		d.lines[0].y1 = d.y;
-		d.lines[0].x2 = 0;
-		d.lines[0].y2 = 0;
+		// d.lines[0].x1 = d.x;
+		// d.lines[0].y1 = d.y;
+		// d.lines[0].x2 = 0;
+		// d.lines[0].y2 = 0;
 	});
 }
