@@ -33,7 +33,7 @@ function line(_x1, _y1, _x2, _y2) {
 	this.y2 = _y2;
 }
 
-var data = d3.range(10).map(function() {
+var data = d3.range(100).map(function() {
 	return new agent(
 		(Math.random()-0.5)*5,
 		(Math.random()-0.5)*5,
@@ -68,6 +68,21 @@ var circles = canvas.selectAll('circle')
 			return d.color;
 		});
 
+var skirts = canvas.selectAll('skirt')
+		.data(data)
+		.enter()
+		.append('circle')
+		.attr('cx', function(d) {
+			return x(d.x);
+		})
+		.attr('cy', function(d) {
+			return y(d.y);
+		})
+		.attr('r', 20)
+		.attr('fill', function(d) {
+			return 'rgba(255, 221, 0, 0.15)';
+		});
+
 var lines = canvas.selectAll('line')
 		.data(data)
 		.enter().append('line')
@@ -96,8 +111,8 @@ d3.timer(function() {
 	if (duration >= 1000) frames = 0, start = now;
 
 	if (run) {
-		//moveRandom();
-		moveRendezvous();
+		moveRandom();
+		//moveRendezvous();
 		render();
 	}
 });
@@ -107,6 +122,9 @@ function render() {
 		return 'translate(' + d.x + ',' + d.y + ')';
 	}).attr('fill', function(d) {
 		return d.color;
+	});
+	skirts.attr('transform', function(d) {
+		return 'translate(' + d.x + ',' + d.y + ')';
 	});
 	lines.attr('x1', function(d) {
 			return +(d3.select(this).attr('x1')) + d.vx;
