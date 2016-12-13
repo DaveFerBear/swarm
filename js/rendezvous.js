@@ -33,7 +33,7 @@ function line(_x1, _y1, _x2, _y2) {
 	this.y2 = _y2;
 }
 
-var data = d3.range(100).map(function() {
+var data = d3.range(10).map(function() {
 	return new agent(
 		(Math.random()-0.5)*5,
 		(Math.random()-0.5)*5,
@@ -44,9 +44,8 @@ var data = d3.range(100).map(function() {
 
 var lineData = [];
 for (var a = 0; a < data.length; a++) {
-	lineData.push([]);
 	for (var b = 0; b < data.length; b++) {
-		lineData[a].push(new line(data[a].x, data[a].y, data[b].x, data[b].y));
+		lineData.push(new line(data[a].x, data[a].y, data[b].x, data[b].y));
 	}
 }
 
@@ -89,17 +88,17 @@ var skirts = canvas.selectAll('skirt')
 var lines = canvas.selectAll('line')
 		.data(lineData)
 		.enter().append('line')
-		.attr('x1', function(d, i, j) {
-			return x(d[i].x1);
+		.attr('x1', function(d) {
+			return x(d.x1);
 		})
-		.attr('y1', function(d, i, j) {
-			return y(d[i].y1);
+		.attr('y1', function(d) {
+			return y(d.y1);
 		})
-		.attr('x2', function(d, i, j) {
-			return x(d[i].x2);
+		.attr('x2', function(d) {
+			return x(d.x2);
 		})
-		.attr('y2', function(d, i, j) {
-			return y(d[i].y2);
+		.attr('y2', function(d) {
+			return y(d.y2);
 		})
 		.attr('stroke', 'white')
 		.attr('stroke-width', 1);
@@ -131,7 +130,7 @@ function render() {
 		return 'translate(' + d.x + ',' + d.y + ')';
 	});
 
-	lines.attr('x1', function(d, i, j) {
+	lines.attr('x1', function(d, i) {
 			return +(d3.select(this).attr('x1')) + data[i].vx;
 	}).attr('y1', function(d, i, j) {
 			return +(d3.select(this).attr('y1')) + data[i].vy;
