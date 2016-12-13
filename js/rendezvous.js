@@ -89,17 +89,17 @@ var skirts = canvas.selectAll('skirt')
 var lines = canvas.selectAll('line')
 		.data(lineData)
 		.enter().append('line')
-		.attr('x1', function(d) {
-			return x(d.x1);
+		.attr('x1', function(d, i, j) {
+			return x(d[i].x1);
 		})
-		.attr('y1', function(d) {
-			return y(d.y1);
+		.attr('y1', function(d, i, j) {
+			return y(d[i].y1);
 		})
-		.attr('x2', function(d) {
-			return x(d.x2);
+		.attr('x2', function(d, i, j) {
+			return x(d[i].x2);
 		})
-		.attr('y2', function(d) {
-			return y(d.y2);
+		.attr('y2', function(d, i, j) {
+			return y(d[i].y2);
 		})
 		.attr('stroke', 'white')
 		.attr('stroke-width', 1);
@@ -131,11 +131,11 @@ function render() {
 		return 'translate(' + d.x + ',' + d.y + ')';
 	});
 
-	// lines.attr('x1', function(d) {
-	// 		return +(d3.select(this).attr('x1')) + d.vx;
-	// }).attr('y1', function(d) {
-	// 		return +(d3.select(this).attr('y1')) + d.vy;
-	// });
+	lines.attr('x1', function(d, i, j) {
+			return +(d3.select(this).attr('x1')) + data[i].vx;
+	}).attr('y1', function(d, i, j) {
+			return +(d3.select(this).attr('y1')) + data[i].vy;
+	});
 }
 
 function dist(a, b) {
