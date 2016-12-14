@@ -133,15 +133,15 @@ function moveRendezvous() {
 		var x_component = 0;
 		var y_component = 0;
 		for (var b = 0; b < data.length; b++) {
-			x_component = (data[b].x - data[a].x)*dist(data[a], data[b])*.0001;
-			x_component = (data[b].y - data[a].y)*dist(data[a], data[b])*.0001;
+			var d = dist(data[a], data[b]);
+			if (d != 0) {
+				x_component += (data[b].x - data[a].x)/d;
+				x_component += (data[b].y - data[a].y)/d;
+			}
 		}
-		// console.log(x_component);
-		// console.log(y_component);
-		x_component /= data.length;
-		y_component /= data.length;
-		data[a].vx += x_component;
-		data[a].vy += y_component;
+
+		data[a].vx += x_component*.01;
+		data[a].vy += y_component*.01;
 		data[a].x += data[a].vx;
 		data[a].y += data[a].vy;
 	}
