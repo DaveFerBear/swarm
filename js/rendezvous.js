@@ -3,7 +3,7 @@ function play() {
 }
 
 var run = false;
-var NUM_AGENTS = 12;
+var NUM_AGENTS = 35;
 var SKIRT_RADIUS = 100;
 var canvas = d3.select('html')
 		.append('svg')
@@ -15,8 +15,7 @@ var text = canvas.append("svg:text")
 		.attr("y", 100)
 		.attr('id', 'fps');
 	
-var start = Date.now(),
-	frames = 0;
+var start = Date.now(), frames = 0;
 
 function agent(_x, _y, _vx, _vy, _color) {
 	this.x = _x;
@@ -32,8 +31,7 @@ function line(_x1, _y1, _x2, _y2) {
 	this.y1 = _y1;
 	this.x2 = _x2;
 	this.y2 = _y2;
-	this.show = true
-	; //hide by default
+	this.show = true; //hide by default
 }
 
 var data = d3.range(NUM_AGENTS).map(function() {
@@ -91,7 +89,7 @@ d3.timer(function() {
 
 	if (run) {
 		//moveRandom();
-		moveRendezvous();
+		moveRendezvous(true, false);
 		updateLineData();
 		render();
 	}
@@ -124,29 +122,6 @@ function render() {
 	});
 }
 
-function dist(a, b) {
-	return Math.sqrt(Math.pow(x(a.x) - x(b.x), 2) + Math.pow(y(a.y) - y(b.y), 2));
-}
-
-function moveRendezvous() {
-	for (var a = 0; a < data.length; a++) {
-		var x_component = 0;
-		var y_component = 0;
-		for (var b = 0; b < data.length; b++) {
-			var d = dist(data[a], data[b]);
-			if (d != 0) {
-				x_component += (data[b].x - data[a].x)/d;
-				y_component += (data[b].y - data[a].y)/d;
-			}
-		}
-
-		data[a].vx += x_component*.01;
-		data[a].vy += y_component*.01;
-		data[a].x += data[a].vx;
-		data[a].y += data[a].vy;
-	}
-}
-
 function updateLineData() {
 	var x = 0;
 	for (var a = 0; a < data.length; a++) {
@@ -162,6 +137,41 @@ function updateLineData() {
 				lineData[x].show = false;
 			}			
 			x++;
+		}
+	}
+}
+
+function dist(a, b) {
+	return Math.sqrt(Math.pow(x(a.x) - x(b.x), 2) + Math.pow(y(a.y) - y(b.y), 2));
+}
+
+function moveRendezvous(swarm, gravity) {
+	for (var a = 0; a < data.length; a++) {
+		var x_component = 0;
+		var y_component = 0;
+		for (var b = 0; b < data.length; b++) {
+			var d = dist(data[a], data[b]);
+			if (d != 0) { //edge case for the agent finding itself
+				if (swarm) {
+					if (d < SKIRT_RADIUS*2) {
+						x_component += (data[b].x - data[a].x)/d;
+						y_component += (data[b].y - data[a].y)/d;
+					}
+				} else { //Compute gravity normally
+					x_component += (data[b].x - data[a].x)/d;
+					y_component += (data[b].y - data[a].y)/d;
+				}
+			}
+		}
+
+		if (gravity) {
+			data[a].vx += x_component*.1;
+			data[a].vy += y_component*.1;
+			data[a].x += data[a].vx;
+			data[a].y += data[a].vy;
+		} else {
+			data[a].x += x_component*.1;
+			data[a].y += y_component*.1;
 		}
 	}
 }
