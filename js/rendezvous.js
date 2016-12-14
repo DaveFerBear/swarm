@@ -33,7 +33,7 @@ function line(_x1, _y1, _x2, _y2) {
 	this.y2 = _y2;
 }
 
-var data = d3.range(10).map(function() {
+var data = d3.range(5).map(function() {
 	return new agent(
 		(Math.random()-0.5)*5,
 		(Math.random()-0.5)*5,
@@ -60,12 +60,6 @@ var y = d3.scaleLinear()
 var circles = canvas.selectAll('circle')
 		.data(data)
 		.enter().append('circle')
-		.attr('cx', function(d) {
-			return x(d.x);
-		})
-		.attr('cy', function(d) {
-			return y(d.y);
-		})
 		.attr('r', 5)
 		.attr('fill', function(d) {
 			return d.color;
@@ -74,12 +68,6 @@ var circles = canvas.selectAll('circle')
 var skirts = canvas.selectAll('skirt')
 		.data(data)
 		.enter().append('circle')
-		.attr('cx', function(d) {
-			return x(d.x);
-		})
-		.attr('cy', function(d) {
-			return y(d.y);
-		})
 		.attr('r', 20)
 		.attr('fill', function(d) {
 			return 'rgba(255, 221, 0, 0.15)';
@@ -88,18 +76,6 @@ var skirts = canvas.selectAll('skirt')
 var lines = canvas.selectAll('line')
 		.data(lineData)
 		.enter().append('line')
-		.attr('x1', function(d) {
-			return x(d.x1);
-		})
-		.attr('y1', function(d) {
-			return y(d.y1);
-		})
-		.attr('x2', function(d) {
-			return x(d.x2);
-		})
-		.attr('y2', function(d) {
-			return y(d.y2);
-		})
 		.attr('stroke', 'white')
 		.attr('stroke-width', 1);
 
@@ -115,25 +91,30 @@ d3.timer(function() {
 	if (run) {
 		moveRandom();
 		//moveRendezvous();
+		updateLineData();
 		render();
 	}
 });
 
 function render() {
 	circles.attr('transform', function(d) {
-		return 'translate(' + d.x + ',' + d.y + ')';
+		return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
 	}).attr('fill', function(d) {
 		return d.color;
 	});
 
 	skirts.attr('transform', function(d) {
-		return 'translate(' + d.x + ',' + d.y + ')';
+		return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
 	});
 
 	lines.attr('x1', function(d, i) {
-			return +(d3.select(this).attr('x1')) + data[i].vx;
-	}).attr('y1', function(d, i, j) {
-			return +(d3.select(this).attr('y1')) + data[i].vy;
+		return x(d.x1);
+	}).attr('y1', function(d, i) {
+		return y(d.y1);
+	}).attr('x2', function(d, i) {
+		return x(d.x2);
+	}).attr('y2', function(d, i) {
+		return y(d.y2);
 	});
 }
 
@@ -160,10 +141,23 @@ function moveRendezvous() {
 	}
 }
 
+function updateLineData() {
+	var x = 0;
+	for (var a = 0; a < data.length; a++) {
+		for (var b = 0; b < data.length; b++) {
+			lineData[x].x1 = data[a].x;
+			lineData[x].y1 = data[a].y;
+			lineData[x].x2 = data[b].x;
+			lineData[x].y2 = data[b].y;
+			x++;
+		}
+	}
+}
+
 function moveRandom() {
 	data.forEach(function(d) {
-		d.vx += (Math.random()-0.5)*0.5;
-		d.vy += (Math.random()-0.5)*0.5;
+		d.vx += (Math.random()-0.5)*0.01;
+		d.vy += (Math.random()-0.5)*0.01;
 		d.x += d.vx;
 		d.y += d.vy;
 
