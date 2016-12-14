@@ -136,7 +136,7 @@ function moveRendezvous() {
 			var d = dist(data[a], data[b]);
 			if (d != 0) {
 				x_component += (data[b].x - data[a].x)/d;
-				x_component += (data[b].y - data[a].y)/d;
+				y_component += (data[b].y - data[a].y)/d;
 			}
 		}
 
