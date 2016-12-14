@@ -3,8 +3,8 @@ function play() {
 }
 
 var run = false;
-var NUM_AGENTS = 35;
-var SKIRT_RADIUS = 100;
+var NUM_AGENTS = 20;
+var SKIRT_RADIUS = 120;
 var canvas = d3.select('html')
 		.append('svg')
 		.attr('width', screen.width)
@@ -36,8 +36,8 @@ function line(_x1, _y1, _x2, _y2) {
 
 var data = d3.range(NUM_AGENTS).map(function() {
 	return new agent(
-		(Math.random()-0.5)*5,
-		(Math.random()-0.5)*5,
+		(Math.random()-0.5)*6,
+		(Math.random()-0.5)*6,
 		0,
 		0,
 		'rgb(255, 0, 213)');
@@ -72,7 +72,7 @@ var skirts = canvas.selectAll('skirt')
 		.enter().append('circle')
 		.attr('r', SKIRT_RADIUS)
 		.attr('fill', function(d) {
-			return 'rgba(255, 221, 0, 0.05)';
+			return 'rgba(255, 221, 0, 0.02)';
 		});
 var lines = canvas.selectAll('line')
 		.data(lineData)
@@ -151,11 +151,13 @@ function moveRendezvous(swarm, gravity) {
 		var y_component = 0;
 		for (var b = 0; b < data.length; b++) {
 			var d = dist(data[a], data[b]);
-			if (d != 0) { //edge case for the agent finding itself
+			if (d > 100) { //edge case for the agent finding itself
 				if (swarm) {
 					if (d < SKIRT_RADIUS*2) {
-						x_component += (data[b].x - data[a].x)/d;
-						y_component += (data[b].y - data[a].y)/d;
+						if (Math.sqrt(Math.pow(x_component, 2), Math.pow(y_component,2)) < .01) { //set max velocity
+							x_component += (data[b].x - data[a].x)/d;
+							y_component += (data[b].y - data[a].y)/d;
+						}
 					}
 				} else { //Compute gravity normally
 					x_component += (data[b].x - data[a].x)/d;
@@ -163,15 +165,14 @@ function moveRendezvous(swarm, gravity) {
 				}
 			}
 		}
-
 		if (gravity) {
-			data[a].vx += x_component*.1;
-			data[a].vy += y_component*.1;
+			data[a].vx += x_component*.5;
+			data[a].vy += y_component*.5;
 			data[a].x += data[a].vx;
 			data[a].y += data[a].vy;
 		} else {
-			data[a].x += x_component*.1;
-			data[a].y += y_component*.1;
+			data[a].x += x_component*.5;
+			data[a].y += y_component*.5;
 		}
 	}
 }
