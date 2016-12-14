@@ -3,7 +3,7 @@ function play() {
 }
 
 var run = false;
-
+var SKIRT_RADIUS = 100;
 var canvas = d3.select('html')
 		.append('svg')
 		.attr('width', screen.width)
@@ -31,6 +31,8 @@ function line(_x1, _y1, _x2, _y2) {
 	this.y1 = _y1;
 	this.x2 = _x2;
 	this.y2 = _y2;
+	this.show = true
+	; //hide by default
 }
 
 var data = d3.range(5).map(function() {
@@ -57,6 +59,8 @@ var y = d3.scaleLinear()
 	.domain([-5, 5])
 	.range([0, screen.height]);
 
+
+//static attributes
 var circles = canvas.selectAll('circle')
 		.data(data)
 		.enter().append('circle')
@@ -64,22 +68,18 @@ var circles = canvas.selectAll('circle')
 		.attr('fill', function(d) {
 			return d.color;
 		});
-
 var skirts = canvas.selectAll('skirt')
 		.data(data)
 		.enter().append('circle')
-		.attr('r', 20)
+		.attr('r', SKIRT_RADIUS)
 		.attr('fill', function(d) {
-			return 'rgba(255, 221, 0, 0.15)';
+			return 'rgba(255, 221, 0, 0.05)';
 		});
-
 var lines = canvas.selectAll('line')
 		.data(lineData)
 		.enter().append('line')
-		.attr('stroke', 'white')
 		.attr('stroke-width', 1);
 
-//initializes circles at center to begin
 render();
 
 d3.timer(function() {
@@ -115,11 +115,16 @@ function render() {
 		return x(d.x2);
 	}).attr('y2', function(d, i) {
 		return y(d.y2);
+	}).attr('stroke', function(d) {
+		if (d.show)
+			return 'white';
+		else
+			return '#00ffffff'; //transparent
 	});
 }
 
 function dist(a, b) {
-	return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+	return Math.sqrt(Math.pow(x(a.x) - x(b.x), 2) + Math.pow(y(a.y) - y(b.y), 2));
 }
 
 function moveRendezvous() {
@@ -145,10 +150,16 @@ function updateLineData() {
 	var x = 0;
 	for (var a = 0; a < data.length; a++) {
 		for (var b = 0; b < data.length; b++) {
-			lineData[x].x1 = data[a].x;
-			lineData[x].y1 = data[a].y;
-			lineData[x].x2 = data[b].x;
-			lineData[x].y2 = data[b].y;
+			if (dist(data[a], data[b]) < SKIRT_RADIUS*2) {
+				lineData[x].show = true;
+				//Only bother to update positions if visible
+				lineData[x].x1 = data[a].x;
+				lineData[x].y1 = data[a].y;
+				lineData[x].x2 = data[b].x;
+				lineData[x].y2 = data[b].y;
+			} else {
+				lineData[x].show = false;
+			}			
 			x++;
 		}
 	}
@@ -160,10 +171,5 @@ function moveRandom() {
 		d.vy += (Math.random()-0.5)*0.01;
 		d.x += d.vx;
 		d.y += d.vy;
-
-		// d.lines[0].x1 = d.x;
-		// d.lines[0].y1 = d.y;
-		// d.lines[0].x2 = 0;
-		// d.lines[0].y2 = 0;
 	});
 }
