@@ -3,6 +3,7 @@ function play() {
 }
 
 var run = false;
+var NUM_AGENTS = 12;
 var SKIRT_RADIUS = 100;
 var canvas = d3.select('html')
 		.append('svg')
@@ -35,7 +36,7 @@ function line(_x1, _y1, _x2, _y2) {
 	; //hide by default
 }
 
-var data = d3.range(5).map(function() {
+var data = d3.range(NUM_AGENTS).map(function() {
 	return new agent(
 		(Math.random()-0.5)*5,
 		(Math.random()-0.5)*5,
@@ -89,8 +90,8 @@ d3.timer(function() {
 	if (duration >= 1000) frames = 0, start = now;
 
 	if (run) {
-		moveRandom();
-		//moveRendezvous();
+		//moveRandom();
+		moveRendezvous();
 		updateLineData();
 		render();
 	}
@@ -132,8 +133,8 @@ function moveRendezvous() {
 		var x_component = 0;
 		var y_component = 0;
 		for (var b = 0; b < data.length; b++) {
-			x_component += (data[b].x - data[a].x)*dist(data[a], data[b])*.01;
-			x_component += (data[b].y - data[a].y)*dist(data[a], data[b])*.01;
+			x_component = (data[b].x - data[a].x)*dist(data[a], data[b])*.0001;
+			x_component = (data[b].y - data[a].y)*dist(data[a], data[b])*.0001;
 		}
 		// console.log(x_component);
 		// console.log(y_component);
