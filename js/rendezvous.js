@@ -4,7 +4,7 @@ function play() {
 
 var run = false;
 var NUM_AGENTS = 20;
-var SKIRT_RADIUS = 120;
+var SKIRT_RADIUS = 140;
 var canvas = d3.select('html')
 		.append('svg')
 		.attr('width', screen.width)
@@ -31,13 +31,13 @@ function line(_x1, _y1, _x2, _y2) {
 	this.y1 = _y1;
 	this.x2 = _x2;
 	this.y2 = _y2;
-	this.show = true; //hide by default
+	this.show = false; //hide by default
 }
 
 var data = d3.range(NUM_AGENTS).map(function() {
 	return new agent(
-		(Math.random()-0.5)*6,
-		(Math.random()-0.5)*6,
+		(Math.random()-0.5)*5,
+		(Math.random()-0.5)*5,
 		0,
 		0,
 		'rgb(255, 0, 213)');
@@ -72,13 +72,14 @@ var skirts = canvas.selectAll('skirt')
 		.enter().append('circle')
 		.attr('r', SKIRT_RADIUS)
 		.attr('fill', function(d) {
-			return 'rgba(255, 221, 0, 0.02)';
+			return 'rgba(255, 140, 0, 0.02)';
 		});
 var lines = canvas.selectAll('line')
 		.data(lineData)
 		.enter().append('line')
-		.attr('stroke-width', 1);
+		.attr('stroke-width', .1);
 
+updateLineData();
 render();
 
 d3.timer(function() {
@@ -166,8 +167,8 @@ function moveRendezvous(swarm, gravity) {
 			}
 		}
 		if (gravity) {
-			data[a].vx += x_component*.5;
-			data[a].vy += y_component*.5;
+			data[a].vx += x_component;
+			data[a].vy += y_component;
 			data[a].x += data[a].vx;
 			data[a].y += data[a].vy;
 		} else {

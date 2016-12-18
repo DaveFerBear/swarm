@@ -1,5 +1,6 @@
 body {
-	background-color: rgb(39, 40, 34);
+	/*background-color: rgb(39, 40, 34);*/
+	background-color: rgb(0,30,49);
 	position: absolute;
 }
 
@@ -11,4 +12,12 @@ h1 {
 #fps {
 	font-family: Helvetica;
 	fill: white;
+}
+
+#input-wrapper {
+	display: inline-block;
+}
+
+.input {
+	margin: 10px;
 }

@@ -3,12 +3,17 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="styles.css">
-		<script src="d3/d3.min.js"></script>
+		<script src="d3/d3.min.js"></script> <!-- for offline work -->
 		<script src="https://d3js.org/d3.v4.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	</head>
 	<body id = "body">
 		<h1>Swarm Demo: </h1>
-		<button type="button"onclick = "play();">Swap</button>
+		<div id = "input-wrapper">
+			<div class = "input"><button type="button"onclick = "play();">Play/Pause</button></div>
+			<div class = "input"><input type="text" id="myText" value=".001"></div>
+			<div class = "input"><input type="text" id="myText" value=".001"></div>
+		</div>
 	</body>
 	<script src="js/rendezvous.js" type="text/javascript"></script>
 </html>
