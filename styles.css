@@ -3,7 +3,7 @@ body {
 	position: absolute;
 }
 
-h1 {
+* {
 	font-family: Helvetica;
 	color: white;
 }
@@ -19,6 +19,10 @@ h1 {
 
 .input {
 	margin: 10px;
+}
+
+input, button {
+	color: black;
 }
 
 /* Play/Pause icon animation */

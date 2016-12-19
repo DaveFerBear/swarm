@@ -5,6 +5,42 @@ $(".play-button").click(function() {
 });
 
 //Swarm Demo
+function apply() {
+	NUM_AGENTS = document.getElementById("num_agents").value;
+	canvas.selectAll('circle').remove();
+	canvas.selectAll('skirt').remove();
+	canvas.selectAll('line').remove();
+	data = d3.range(NUM_AGENTS).map(function() {
+	return new agent(
+		(Math.random()-0.5)*5,
+		(Math.random()-0.5)*5,
+		0,
+		0,
+		'rgb(255, 0, 213)');
+	});
+	createLineData();
+	circles = canvas.selectAll('circle')
+		.data(data)
+		.enter().append('circle')
+		.attr('r', 5)
+		.attr('fill', function(d) {
+			return d.color;
+		});
+	skirts = canvas.selectAll('skirt')
+		.data(data)
+		.enter().append('circle')
+		.attr('r', SKIRT_RADIUS)
+		.attr('fill', function(d) {
+			return 'rgba(255, 140, 0, 0.02)';
+		});
+	lines = canvas.selectAll('line')
+		.data(lineData)
+		.enter().append('line')
+		.attr('stroke-width', .1);
+	updateLineData();
+	render();
+}
+
 var run = false;
 var NUM_AGENTS = 20;
 var SKIRT_RADIUS = 140;
@@ -47,11 +83,7 @@ var data = d3.range(NUM_AGENTS).map(function() {
 });
 
 var lineData = [];
-for (var a = 0; a < data.length; a++) {
-	for (var b = 0; b < data.length; b++) {
-		lineData.push(new line(data[a].x, data[a].y, data[b].x, data[b].y));
-	}
-}
+createLineData();
 
 var x = d3.scaleLinear()
 	.domain([-5, 5])
@@ -124,6 +156,14 @@ function render() {
 		else
 			return '#00ffffff'; //transparent
 	});
+}
+
+function createLineData() {
+	for (var a = 0; a < data.length; a++) {
+		for (var b = 0; b < data.length; b++) {
+			lineData.push(new line(data[a].x, data[a].y, data[b].x, data[b].y));
+		}
+	}
 }
 
 function updateLineData() {
