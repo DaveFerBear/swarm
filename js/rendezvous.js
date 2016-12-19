@@ -1,7 +1,10 @@
-function play() {
-	run = !run;
-}
+//Pause, Play animation
+$(".play-button").click(function() {
+  $(this).toggleClass("paused");
+  run = !run;
+});
 
+//Swarm Demo
 var run = false;
 var NUM_AGENTS = 20;
 var SKIRT_RADIUS = 140;
