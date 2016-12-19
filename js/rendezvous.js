@@ -7,6 +7,14 @@ $(".play-button").click(function() {
 //Swarm Demo
 function apply() {
 	NUM_AGENTS = document.getElementById("num_agents").value;
+
+	var radioValue = $("input[name='gravity']:checked").val();
+    if(radioValue=="on") {
+        gravity = true;
+    } else {
+    	gravity = false;
+    }
+
 	canvas.selectAll('circle').remove();
 	canvas.selectAll('skirt').remove();
 	canvas.selectAll('line').remove();
@@ -42,6 +50,7 @@ function apply() {
 }
 
 var run = false;
+var gravity = false;
 var NUM_AGENTS = 20;
 var SKIRT_RADIUS = 140;
 var canvas = d3.select('html')
@@ -125,7 +134,7 @@ d3.timer(function() {
 
 	if (run) {
 		//moveRandom();
-		moveRendezvous(true, false);
+		moveRendezvous(true);
 		updateLineData();
 		render();
 	}
@@ -189,7 +198,7 @@ function dist(a, b) {
 	return Math.sqrt(Math.pow(x(a.x) - x(b.x), 2) + Math.pow(y(a.y) - y(b.y), 2));
 }
 
-function moveRendezvous(swarm, gravity) {
+function moveRendezvous(swarm) {
 	for (var a = 0; a < data.length; a++) {
 		var x_component = 0;
 		var y_component = 0;
