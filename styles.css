@@ -1,0 +1,26 @@
+body {
+	background-color: rgb(39, 40, 34);
+	position: absolute;
+}
+
+* {
+	font-family: Helvetica;
+	color: white;
+}
+
+#fps {
+	font-family: Helvetica;
+	fill: white;
+}
+
+#input-wrapper {
+	display: inline-block;
+}
+
+.input {
+	margin: 10px;
+}
+
+input, button {
+	color: black;
+}

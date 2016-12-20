@@ -3,6 +3,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="styles/styles.css">
+		<link rel="stylesheet" type="text/css" href="styles/switch_toggle.css">
 		<link rel="stylesheet" type="text/css" href="styles/play_toggle.css">
 		<script src="d3/d3.min.js"></script> <!-- for offline work -->
 		<script src="https://d3js.org/d3.v4.js"></script>
@@ -17,12 +18,23 @@
 			<div class="triangle-2"></div>
 		</a>
 		<div id = "input-wrapper">
-			<div class = "input"># Agents <input type="text" id="num_agents" value=5></div>
-			<div class = "input">Skirt Radius <input type="text" id="myText" value=140></div>
-			<form class = "input">
-				<input type="radio" name="gravity" value="on">Gravity On<br>
-				<input type="radio" name="gravity" value="off" checked="checked">Gravity Off<br>
-			</form>
+			<div class = "input"><input type="text" id="num_agents" value=5>
+				<p># Agents</p>
+			</div>
+			<div class = "input"><input type="text" id="myText" value=140>
+				<p>Skirt Radius</p>
+			</div>
+			<label class="switch">
+				<input type="checkbox" checked>
+				<div class="slider round"></div>
+			</label>
+			Gravity
+			<br>
+			<label class="switch">
+				<input type="checkbox" checked>
+				<div class="slider round"></div>
+			</label>
+			Swarm
 			<div class = "input"><button type="button" onclick = "apply();">Apply</button></div>
 		</div>
 	</body>
