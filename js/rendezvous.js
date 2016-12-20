@@ -9,8 +9,12 @@ function apply() {
 	NUM_AGENTS = document.getElementById("num_agents").value;
 	SKIRT_RADIUS= document.getElementById("skirt_radius").value;
 	gravity = $("input[name='gravity_switch']:checked").val();
-	swarming = $("input[name='swarming_switch']:checked").val();
-
+	swarming = $("input[id='swarming_switch']:checked").val();
+	if ($("input[id='rendezvous']:checked").val()) {
+		mode = "rendezvous";
+	} else {
+		mode = "random";
+	}
 	canvas.selectAll('circle').remove();
 	canvas.selectAll('skirt').remove();
 	canvas.selectAll('line').remove();
@@ -49,8 +53,10 @@ function apply() {
 var run = false;
 var gravity = false;
 var swarming = true;
+var mode = "rendezvous";
 var NUM_AGENTS = 20;
 var SKIRT_RADIUS = 140;
+
 var canvas = d3.select('html')
 		.append('svg')
 		.attr('width', screen.width)
@@ -131,8 +137,11 @@ d3.timer(function() {
 	if (duration >= 1000) frames = 0, start = now;
 
 	if (run) {
-		//moveRandom();
-		moveRendezvous();
+		if (mode == "rendezvous") {
+			moveRendezvous();
+		} else {
+			moveRandom();
+		}
 		updateLineData();
 		render();
 	}
