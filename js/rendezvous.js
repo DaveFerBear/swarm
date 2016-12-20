@@ -9,7 +9,7 @@ function apply() {
 	NUM_AGENTS = document.getElementById("num_agents").value;
 	SKIRT_RADIUS= document.getElementById("skirt_radius").value;
 	gravity = $("input[name='gravity_switch']:checked").val();
-	swarming = $("input[id='swarming_switch']:checked").val();
+	swarming = $("input[name='swarming_switch']:checked").val();
 	if ($("input[id='rendezvous']:checked").val()) {
 		mode = "rendezvous";
 	} else {
