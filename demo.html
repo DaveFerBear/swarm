@@ -3,6 +3,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="styles/styles.css">
+		<link rel="stylesheet" type="text/css" href="styles/radio_toggle.css">
 		<link rel="stylesheet" type="text/css" href="styles/switch_toggle.css">
 		<link rel="stylesheet" type="text/css" href="styles/play_toggle.css">
 		<script src="d3/d3.min.js"></script> <!-- for offline work -->
@@ -34,7 +35,13 @@
 				<input name="swarming_switch" type="checkbox" checked>
 				<div class="slider round"></div>
 			</label>
-			Swarm
+			Skirt Attraction
+			<br>
+			<input type="radio" id="radio01" name="radio" checked/>
+			<label for="radio01"><span></span>Rendezvous</label>
+			<br>
+			<input type="radio" id="radio02" name="radio" />
+			<label for="radio02"><span></span>Random</label>
 			<div class="input"><button type="button" onclick="apply();">Apply</button></div>
 		</div>
 	</body>
