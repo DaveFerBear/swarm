@@ -7,13 +7,9 @@ $(".play-button").click(function() {
 //Swarm Demo
 function apply() {
 	NUM_AGENTS = document.getElementById("num_agents").value;
-
-	var radioValue = $("input[name='gravity']:checked").val();
-    if(radioValue=="on") {
-        gravity = true;
-    } else {
-    	gravity = false;
-    }
+	SKIRT_RADIUS= document.getElementById("skirt_radius").value;
+	gravity = $("input[name='gravity_switch']:checked").val();
+	swarming = $("input[name='swarming_switch']:checked").val();
 
 	canvas.selectAll('circle').remove();
 	canvas.selectAll('skirt').remove();
@@ -26,6 +22,7 @@ function apply() {
 		0,
 		'rgb(255, 0, 213)');
 	});
+	lineData = [];
 	createLineData();
 	circles = canvas.selectAll('circle')
 		.data(data)
@@ -51,6 +48,7 @@ function apply() {
 
 var run = false;
 var gravity = false;
+var swarming = true;
 var NUM_AGENTS = 20;
 var SKIRT_RADIUS = 140;
 var canvas = d3.select('html')
@@ -134,7 +132,7 @@ d3.timer(function() {
 
 	if (run) {
 		//moveRandom();
-		moveRendezvous(true);
+		moveRendezvous();
 		updateLineData();
 		render();
 	}
@@ -198,14 +196,14 @@ function dist(a, b) {
 	return Math.sqrt(Math.pow(x(a.x) - x(b.x), 2) + Math.pow(y(a.y) - y(b.y), 2));
 }
 
-function moveRendezvous(swarm) {
+function moveRendezvous() {
 	for (var a = 0; a < data.length; a++) {
 		var x_component = 0;
 		var y_component = 0;
 		for (var b = 0; b < data.length; b++) {
 			var d = dist(data[a], data[b]);
 			if (d > 100) { //edge case for the agent finding itself
-				if (swarm) {
+				if (swarming) {
 					if (d < SKIRT_RADIUS*2) {
 						if (Math.sqrt(Math.pow(x_component, 2), Math.pow(y_component,2)) < .01) { //set max velocity
 							x_component += (data[b].x - data[a].x)/d;

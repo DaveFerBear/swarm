@@ -6,11 +6,6 @@
   margin: 4px 10px;
 }
 
-p {
-    display: inline-block;
-    margin: 0px;
-}
-
 .switch input {display:none;}
 
 .slider {
@@ -58,4 +53,9 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+p {
+    display: inline-block;
+    margin: 0px;
 }
